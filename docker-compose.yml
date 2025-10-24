@@ -22,7 +22,7 @@ services:
         condition: service_healthy
     env_file:
       - .env
-    # Виконуємо міграції та збір статиків перед стартом gunicorn
+    # run migrations and collectstatic before starting gunicorn
     command: >
       sh -c "
       python manage.py migrate &&
