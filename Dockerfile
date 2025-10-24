@@ -29,6 +29,16 @@ RUN if [ ! -f "manage.py" ]; then \
 # Copy the rest of the project files into the container
 COPY . .
 
+RUN echo '\
+import os\n\
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")\n\
+CSRF_TRUSTED_ORIGINS = [os.getenv("CSRF_TRUSTED_ORIGINS", "http://localhost")]\n\
+STATIC_URL = "/static/"\n\
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")\n\
+MEDIA_URL = "/media/"\n\
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")\n\
+' >> django_project/settings.py
+
 # Expose the port Django will run on (default: 8000)
 EXPOSE 8000
 

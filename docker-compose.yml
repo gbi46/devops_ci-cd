@@ -15,7 +15,7 @@ services:
     networks:
       - app
 
-  web:
+  django:
     build:
       context: .
       dockerfile: Dockerfile
@@ -42,7 +42,7 @@ services:
   nginx:
     image: nginx:alpine
     depends_on:
-      - web
+      - django
     ports:
       - "80:80"
     volumes:
