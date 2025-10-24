@@ -2,10 +2,10 @@
 FROM python:3.12-slim
 
 # Environment variables to optimize Python behavior inside Docker
-ENV PYTHONDONTWRITEBYTECODE=1 \   # Prevents Python from writing .pyc files to disk
-    PYTHONUNBUFFERED=1 \          # Ensures logs are shown in real time (no buffering)
-    PIP_DISABLE_PIP_VERSION_CHECK=1 \  # Disables pip update checks
-    PIP_NO_CACHE_DIR=1                 # Prevents pip from caching packages to save space
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1
 
 # Set the working directory in the container
 WORKDIR /app
