@@ -59,7 +59,7 @@ fi
 if check_command docker-compose; then
     echo "Docker Compose is already installed: $(docker-compose --version)"
 else
-    echo "🛠 Installing Docker Compose..."
+    echo "Installing Docker Compose..."
     LATEST_COMPOSE=$(curl -s https://api.github.com/repos/docker/compose/releases/latest \
         | grep browser_download_url | grep docker-compose-$(uname -s)-$(uname -m) \
         | cut -d '"' -f 4)
@@ -96,7 +96,9 @@ if python3 -m pip show django >/dev/null 2>&1; then
     DJANGO_VER=$(python3 -m django --version)
     echo "Django is already installed (version $DJANGO_VER)"
 else
-    echo "🛠 Installing Django..."
+    echo "Installing Django..."
+    python3 -m venv .venv
+    source .venv/bin/activate
     python3 -m pip install --upgrade pip
     python3 -m pip install django
     echo "Django installed successfully!"
