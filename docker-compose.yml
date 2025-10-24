@@ -16,7 +16,9 @@ services:
       - app
 
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     depends_on:
       db:
         condition: service_healthy
