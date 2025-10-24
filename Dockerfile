@@ -29,4 +29,4 @@ COPY . .
 EXPOSE 8000
 
 # Default command: run migrations and start the Django development server
-CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
+CMD ["gunicorn", "projectname.wsgi:application", "--bind", "0.0.0.0:8000"]
