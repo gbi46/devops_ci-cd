@@ -20,9 +20,11 @@ COPY requirements.txt ./
 
 # Upgrade pip and install Python dependencies
 RUN python -m pip install --upgrade pip && \
-    python -m venv .venv && \
-    . .venv/bin/activate && \
     pip install -r requirements.txt
+
+RUN if [ ! -f "manage.py" ]; then \
+      python -m django startproject django_project . ; \
+    fi
 
 # Copy the rest of the project files into the container
 COPY . .
