@@ -20,6 +20,8 @@ COPY requirements.txt ./
 
 # Upgrade pip and install Python dependencies
 RUN python -m pip install --upgrade pip && \
+    python -m venv .venv && \
+    . .venv/bin/activate && \
     pip install -r requirements.txt
 
 # Copy the rest of the project files into the container
