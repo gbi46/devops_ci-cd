@@ -1,7 +1,7 @@
 # Lesson 5: Terraform AWS Infrastructure Project  
 *(S3 + DynamoDB backend, VPC, and ECR modules)*
 
-```markdown
+
 ## 📁 Project Structure
 
 ```text
