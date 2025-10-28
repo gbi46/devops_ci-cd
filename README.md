@@ -1,8 +1,7 @@
 # Lesson 5: Terraform AWS Infrastructure Project  
 *(S3 + DynamoDB backend, VPC, and ECR modules)*
 
----
-
+```markdown
 ## 📁 Project Structure
 
 ```text
@@ -30,7 +29,7 @@
 │ └── outputs.tf # Outputs the ECR repository URL
 │
 └── README.md # Project documentation (this file)
-
+```
 
 ---
 
@@ -64,3 +63,4 @@ terraform init
 terraform plan
 terraform apply
 terraform destroy
+```
