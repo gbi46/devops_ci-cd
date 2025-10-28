@@ -1,4 +1,4 @@
-# Lesson-5: Terraform AWS Infrastructure Project  
+# Lesson 5: Terraform AWS Infrastructure Project  
 *(S3 + DynamoDB backend, VPC, and ECR modules)*
 
 ---
@@ -32,31 +32,33 @@ lesson-5/
 │
 └── README.md # Project documentation (this file)
 
+
 ---
 
-## 🎯 **Project Goals**
+## 🎯 Project Goals
 
 This Terraform project sets up:
-1. **Remote state backend**  
+
+1. **Remote state backend**
    - S3 bucket for storing Terraform state files  
    - DynamoDB table for state locking  
 
-2. **Network infrastructure (VPC)**  
+2. **Network infrastructure (VPC)**
    - Custom VPC with 3 public and 3 private subnets  
    - Internet Gateway (for public subnets)  
    - NAT Gateway (for private subnets)  
    - Route tables for proper routing  
 
-3. **ECR (Elastic Container Registry)**  
+3. **ECR (Elastic Container Registry)**
    - Secure repository for Docker images  
    - Automatic image scanning on push  
 
 ---
 
-## ⚙️ **Setup Instructions**
+## ⚙️ Setup Instructions
 
 ### Step 1 — Initialize the project locally
-First, work with a **local backend** until your S3 and DynamoDB are created.
+Start with a **local backend** until the S3 bucket and DynamoDB table are created:
 
 ```bash
 terraform init
