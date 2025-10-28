@@ -5,8 +5,7 @@
 
 ## 📁 Project Structure
 
-lesson-5/
-│
+```text
 ├── main.tf # Main Terraform configuration file — connects all modules
 ├── backend.tf # Backend configuration for remote state storage (S3 + DynamoDB)
 ├── outputs.tf # Global outputs that expose key resource information
