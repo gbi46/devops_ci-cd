@@ -1,7 +1,7 @@
 variable "cluster_name" {
   type        = string
   description = "EKS cluster name"
-  default     = "lesson-5-eks"
+  default     = "lesson-7-eks"
 }
 
 variable "cluster_version" {
