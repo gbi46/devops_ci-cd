@@ -103,6 +103,7 @@ resource "aws_eks_node_group" "this" {
   node_group_name = "${var.cluster_name}-ng"
   node_role_arn   = aws_iam_role.eks_nodegroup.arn
   subnet_ids      = var.private_subnet_ids
+  capacity_type   = "ON_DEMAND"
   instance_types  = var.instance_types
 
   scaling_config {
