@@ -112,6 +112,10 @@ resource "aws_eks_node_group" "this" {
     max_size     = var.node_group_max_size
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+  
   update_config {
     max_unavailable = 1
   }
