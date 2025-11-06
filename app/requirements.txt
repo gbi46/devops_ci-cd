@@ -1,0 +1,12 @@
+# --- Core dependencies ---
+Django>=5.0,<6.0           # the web framework itself
+gunicorn>=21.2.0           # WSGI HTTP server for production
+psycopg2-binary>=2.9.9     # PostgreSQL adapter (use -binary in Docker)
+
+# --- Optional but recommended ---
+python-dotenv>=1.0.0       # Load .env files easily (for local/dev)
+whitenoise>=6.6.0          # Serve static files efficiently if no nginx
+dj-database-url>=2.1.0     # Parse DATABASE_URL (useful for .env configs)
+
+# --- (optional) security, config, and utils ---
+django-environ>=0.11.0     # Nice helper for env-based settings (alternative to dotenv)
