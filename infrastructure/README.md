@@ -9,24 +9,30 @@
 ├── backend.tf # Backend configuration for remote state storage (S3 + DynamoDB)
 ├── outputs.tf # Global outputs that expose key resource information
 │
-├── modules/ # Directory containing all reusable Terraform modules
-│ │
-│ ├── s3-backend/ # Module for remote backend resources
-│ │ ├── s3.tf # Creates the S3 bucket for Terraform state
-│ │ ├── dynamodb.tf # Creates the DynamoDB table for state locking
-│ │ ├── variables.tf # Input variables for the S3 and DynamoDB module
-│ │ └── outputs.tf # Outputs bucket and table details
-│ │
-│ ├── vpc/ # Module for Virtual Private Cloud (VPC)
-│ │ ├── vpc.tf # Creates VPC, subnets, and Internet Gateway
-│ │ ├── routes.tf # Configures routing tables and NAT gateways
-│ │ ├── variables.tf # Input variables for network configuration
-│ │ └── outputs.tf # Outputs VPC ID and subnet information
-│ │
-│ └── ecr/ # Module for Elastic Container Registry (ECR)
-│ ├── ecr.tf # Creates the ECR repository
-│ ├── variables.tf # Input variables for the ECR module
-│ └── outputs.tf # Outputs the ECR repository URL
+├── modules/                        # Directory containing all reusable Terraform modules
+│
+│  ├── ecr/                         # Module for Elastic Container Registry (ECR)
+│  │  ├── ecr.tf                    # Creates the ECR repository
+│  │  ├── variables.tf              # Input variables for the ECR module
+│  │  └── outputs.tf                # Outputs the ECR repository URL
+│
+│  ├── s3-backend/                  # Module for remote backend resources (Terraform state)
+│  │  ├── s3.tf                     # Creates the S3 bucket
+│  │  ├── dynamodb.tf               # Creates the DynamoDB lock table
+│  │  ├── variables.tf              # Input variables for the backend module
+│  │  └── outputs.tf                # Outputs bucket & table names
+│
+│  ├── vpc/                         # Module for Virtual Private Cloud (VPC)
+│  │  ├── vpc.tf                    # Creates VPC and subnets
+│  │  ├── routes.tf                 # Routing rules and gateways
+│  │  ├── variables.tf              # Variables for network configuration
+│  │  └── outputs.tf                # Outputs VPC ID and subnet lists
+│
+│  └── eks/                         # Module for Elastic Kubernetes Service (EKS)
+│     ├── eks.tf                    # Creates EKS cluster & worker node groups
+│     ├── variables.tf              # Input variables for the EKS module (cluster name, subnets, node settings)
+│     └── outputs.tf                # Outputs kubeconfig data, cluster endpoint, CA cert, and node group name
+
 │
 └── README.md # Project documentation (this file)
 ```
