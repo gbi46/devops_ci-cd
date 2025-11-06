@@ -29,8 +29,7 @@ autoscaling:
   maxReplicas: 6
   targetCPUUtilizationPercentage: 70
 
-# --- Environment (moved from your topic 4) ---
-# Put ONLY non-secret env vars here.
+# --- Environment variables ---
 env:
   DJANGO_SETTINGS_MODULE: "config.settings"
   DJANGO_DEBUG: "false"
