@@ -1,0 +1,48 @@
+# --- Image ---
+image:
+  repository: 550127688581.dkr.ecr.eu-central-1.amazonaws.com/lesson-7-ecr
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+# --- Pod replica settings ---
+replicaCount: 2
+
+# --- Service ---
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8000
+
+# --- Resources (tune for HPA to work well) ---
+resources:
+  requests:
+    cpu: "200m"
+    memory: "256Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+# --- Autoscaling (HPA) ---
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+
+# --- Environment (moved from your topic 4) ---
+# Put ONLY non-secret env vars here.
+env:
+  DJANGO_SETTINGS_MODULE: "config.settings"
+  DJANGO_DEBUG: "false"
+  DJANGO_ALLOWED_HOSTS: "*"
+  # Add more as needed, e.g.:
+  # DATABASE_URL: "postgres://user:pass@host:5432/dbname"
+
+# --- Pod annotations / labels (optional) ---
+podAnnotations: {}
+labels: {}
+
+# --- Node selector / tolerations (optional) ---
+nodeSelector: {}
+tolerations: []
+affinity: {}
