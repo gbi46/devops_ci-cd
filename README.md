@@ -1,66 +1,121 @@
-# Lesson 5: Terraform AWS Infrastructure Project  
+# Terraform AWS Infrastructure Project
 *(S3 + DynamoDB backend, VPC, and ECR modules)*
-
 
 ## 📁 Project Structure
 
-```text
-├── main.tf # Main Terraform configuration file — connects all modules
-├── backend.tf # Backend configuration for remote state storage (S3 + DynamoDB)
-├── outputs.tf # Global outputs that expose key resource information
-│
-├── modules/ # Directory containing all reusable Terraform modules
-│ │
-│ ├── s3-backend/ # Module for remote backend resources
-│ │ ├── s3.tf # Creates the S3 bucket for Terraform state
-│ │ ├── dynamodb.tf # Creates the DynamoDB table for state locking
-│ │ ├── variables.tf # Input variables for the S3 and DynamoDB module
-│ │ └── outputs.tf # Outputs bucket and table details
-│ │
-│ ├── vpc/ # Module for Virtual Private Cloud (VPC)
-│ │ ├── vpc.tf # Creates VPC, subnets, and Internet Gateway
-│ │ ├── routes.tf # Configures routing tables and NAT gateways
-│ │ ├── variables.tf # Input variables for network configuration
-│ │ └── outputs.tf # Outputs VPC ID and subnet information
-│ │
-│ └── ecr/ # Module for Elastic Container Registry (ECR)
-│ ├── ecr.tf # Creates the ECR repository
-│ ├── variables.tf # Input variables for the ECR module
-│ └── outputs.tf # Outputs the ECR repository URL
-│
-└── README.md # Project documentation (this file)
 ```
+    ├── app
+    │   ├── Dockerfile
+    │   └── requirements.txt
+    ├── infrastructure
+    │   ├── charts
+    │   │   └── django-app
+    │   │       ├── templates
+    │   │       │   ├── _helpers.tpl
+    │   │       │   ├── configmap.yaml
+    │   │       │   ├── deployment.yaml
+    │   │       │   ├── hpa.yaml
+    │   │       │   └── service.yaml
+    │   │       ├── Chart.yaml
+    │   │       └── values.yaml
+    │   ├── modules
+    │   │   ├── ecr
+    │   │   │   ├── ecr.tf
+    │   │   │   ├── outputs.tf
+    │   │   │   └── variables.tf
+    │   │   ├── eks
+    │   │   │   ├── eks.tf
+    │   │   │   ├── outputs.tf
+    │   │   │   └── variables.tf
+    │   │   ├── s3-backend
+    │   │   │   ├── dynamodb.tf
+    │   │   │   ├── outputs.tf
+    │   │   │   ├── s3.tf
+    │   │   │   └── variables.tf
+    │   │   └── vpc
+    │   │       ├── outputs.tf
+    │   │       ├── routes.tf
+    │   │       ├── variables.tf
+    │   │       └── vpc.tf
+    │   ├── .gitignore
+    │   ├── backend.tf
+    │   ├── eks-create.json
+    │   ├── main.tf
+    │   └── outputs.tf
+    └── README.md
+```
+
+### Requirements
+
+- Terraform >= 1.0
+- Providers: aws
+- Valid credentials
+
+**Backend:** s3
+
+**Modules:** ./modules/ecr, ./modules/eks, ./modules/s3-backend, ./modules/vpc
+
+## Requirements
+
+- Terraform >= 1.0
+- Credentials configured for your cloud provider (e.g., AWS via environment variables or config file)
 
 ---
 
 ## 🎯 Project Goals
 
-This Terraform project sets up:
+This Terraform project automates the deployment and configuration of a scalable infrastructure for a Django application using modern AWS and Kubernetes tools. It includes:
 
-1. **Remote state backend**
-   - S3 bucket for storing Terraform state files  
-   - DynamoDB table for state locking  
+1. **Kubernetes Cluster Provisioning**
 
-2. **Network infrastructure (VPC)**
-   - Custom VPC with 3 public and 3 private subnets  
-   - Internet Gateway (for public subnets)  
-   - NAT Gateway (for private subnets)  
-   - Route tables for proper routing  
+   - Automated creation of an Amazon EKS (Elastic Kubernetes Service) cluster using Terraform
 
-3. **ECR (Elastic Container Registry)**
-   - Secure repository for Docker images  
-   - Automatic image scanning on push  
+   - Configuration of node groups, networking, and IAM roles for seamless integration
 
----
+2. **Elastic Container Registry (ECR) Setup**
 
-## ⚙️ Setup Instructions
+   - Secure AWS ECR repository for storing Docker images of the Django application
 
-### Step 1 — Initialize the project locally
-Start with a **local backend** until the S3 bucket and DynamoDB table are created:
+   - Image scanning enabled to ensure container security
+
+3. **Docker Image Management**
+
+   - Building and pushing the Django Docker image to the ECR repository
+
+   - Versioned image tagging for consistent deployment updates
+
+4. **Helm Chart Deployment**
+
+   - Custom Helm chart for managing application deployment
+
+   - Includes key Kubernetes manifests:
+
+      - deployment.yaml — Pod and ReplicaSet configuration
+
+      - service.yaml — Service exposure and networking
+
+      - hpa.yaml — Horizontal Pod Autoscaler setup for scaling
+
+      - configmap.yaml — Application configuration management
+
+## Getting Started
+
+This is a **Terraform** project for provisioning infrastructure.
+
+### Quick Start
 
 ```bash
+cd infrastructure/modules/s3-backend
 terraform init
 terraform plan
 terraform apply
-terraform destroy
+```
+
+### Run app with infrastructure
+
+```bash
+aws sts get-caller-identity
+aws configure get region
+aws eks update-kubeconfig --name <cluster> --region <region>
+kubectl config current-context
 ```
