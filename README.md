@@ -119,3 +119,46 @@ aws configure get region
 aws eks update-kubeconfig --name <cluster> --region <region>
 kubectl config current-context
 ```
+
+1. **Kubernetes cluster is created via Terraform and running**
+
+```bash
+# Cluster exists and ACTIVE
+aws eks describe-cluster --name <cluster> --region <region> \
+  --query 'cluster.status' --output text
+
+# Nodes are Ready
+kubectl get nodes -o wide
+
+# Core namespaces healthy
+kubectl get ns
+kubectl get pods -A --field-selector=status.phase!=Running,status.phase!=Succeeded
+```
+
+2. **ECR exists and contains Django image**
+
+```bash
+aws ecr describe-repositories --repository-names <repo> --region <region> \
+  --query 'repositories[0].repositoryUri' --output text
+
+aws ecr list-images --repository-name <repo> --region <region> \
+  --query 'imageIds[*].imageTag' --output text
+```
+
+3. **Deployment, Service, HPA are installed and working (via Helm)**
+
+```bash
+helm list -n <namespace>
+helm status <release> -n <namespace>
+kubectl get deploy,rs,po,svc,hpa -n <namespace>
+kubectl rollout status deploy/<release>-app -n <namespace> --timeout=120s
+# If different names, adjust: `kubectl get deploy -n <namespace>` to see exact name
+kubectl get hpa -n <namespace>
+kubectl describe hpa <release>-hpa -n <namespace>   # check metrics target/source
+```
+
+4. **ConfigMap is created and used by the app**
+kubectl get configmap -n <namespace>
+kubectl describe configmap <release>-config -n <namespace>    # adjust name
+kubectl get deploy <deploy_name> -n <namespace> -o yaml | \
+  yq '.spec.template.spec | {envFrom: .containers[0].envFrom, volumes, volumeMounts: .containers[0].volumeMounts}'

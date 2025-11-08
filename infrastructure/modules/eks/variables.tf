@@ -28,7 +28,7 @@ variable "public_subnet_ids" {
 
 variable "node_group_desired_size" {
   type    = number
-  default = 1
+  default = 2
 }
 
 variable "node_group_min_size" {
@@ -38,13 +38,13 @@ variable "node_group_min_size" {
 
 variable "node_group_max_size" {
   type    = number
-  default = 1
+  default = 4
 }
 
 variable "instance_types" {
   type        = list(string)
   description = "EC2 instance types for the managed node group"
-  default     = ["t3.micro"]
+  default     = ["t3.small"]
 }
 
 variable "tags" {
