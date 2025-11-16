@@ -5,7 +5,7 @@ variable "aws_region" {
 
 variable "tf_state_bucket_name" {
   type    = string
-  default = "lesson-8-9-tf-state-bucket-1"
+  default = "lesson-8-9-tf-state-bucket-2"
 }
 
 variable "tf_lock_table_name" {

@@ -6,7 +6,6 @@
 - Terraform >= 1.5
 - kubectl, helm
 - GitHub/GitLab репозиторії:
-  - **app-repo** – з `Dockerfile` та `Jenkinsfile`
   - **env-repo** – з Helm-чартом `charts/django-app`, який дивиться Argo CD
 
 ## 2. Порядок запуску інфраструктури
