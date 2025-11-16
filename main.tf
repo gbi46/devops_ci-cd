@@ -56,7 +56,7 @@ module "eks" {
 
   cluster_endpoint_public_access       = true
   cluster_endpoint_private_access      = true
-  cluster_endpoint_public_access_cidrs = ["${chomp(data.http.my_ip.body)}/32"]
+  cluster_endpoint_public_access_cidrs = ["${chomp(data.http.my_ip.response_body)}/32"]
 }
 
 # Дані про EKS для kube/helm
