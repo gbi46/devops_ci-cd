@@ -12,6 +12,17 @@ module "eks" {
   cluster_endpoint_private_access      = var.cluster_endpoint_private_access
   cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
 
+   # Manage aws-auth ConfigMap via module
+  manage_aws_auth = true
+
+  aws_auth_users = [
+    {
+      userarn  = "arn:aws:iam::534278686940:user/terraform-user"
+      username = "terraform-user"
+      groups   = ["system:masters"]
+    }
+  ]
+
   eks_managed_node_groups = {
     default = {
       desired_size = 2
