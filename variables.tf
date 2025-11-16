@@ -5,10 +5,10 @@ variable "aws_region" {
 
 variable "tf_state_bucket_name" {
   type    = string
-  default = "lesson-8-9-tf-state-bucket-4"
+  default = "lesson-8-9-tf-state-bucket-5"
 }
 
 variable "tf_lock_table_name" {
   type    = string
-  default = "terraform-locks-1"
+  default = "terraform-locks-2"
 }
