@@ -17,26 +17,19 @@ terraform {
   }
 }
 
-# -----------------------
-# AWS provider
-# -----------------------
+# AWS
 provider "aws" {
   region = var.aws_region
 }
 
-# -----------------------
-# S3 + DynamoDB backend
-# -----------------------
+# S3 + DynamoDB для бекенду (ресурси)
 module "s3_backend" {
   source      = "./modules/s3-backend"
-
   bucket_name = var.tf_state_bucket_name
   table_name  = var.tf_lock_table_name
 }
 
-# -----------------------
 # VPC
-# -----------------------
 module "vpc" {
   source = "./modules/vpc"
 
@@ -48,9 +41,7 @@ module "vpc" {
   private_subnets = ["10.0.11.0/24", "10.0.12.0/24"]
 }
 
-# -----------------------
 # EKS
-# -----------------------
 module "eks" {
   source = "./modules/eks"
 
@@ -59,9 +50,7 @@ module "eks" {
   private_subnets = module.vpc.private_subnets
 }
 
-# -----------------------
-# Дані про EKS-кластер (для провайдерів)
-# -----------------------
+# Дані про EKS для kube/helm
 data "aws_eks_cluster" "this" {
   name       = module.eks.cluster_name
   depends_on = [module.eks]
@@ -72,18 +61,14 @@ data "aws_eks_cluster_auth" "this" {
   depends_on = [module.eks]
 }
 
-# -----------------------
 # Kubernetes provider
-# -----------------------
 provider "kubernetes" {
   host                   = data.aws_eks_cluster.this.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.this.certificate_authority[0].data)
   token                  = data.aws_eks_cluster_auth.this.token
 }
 
-# -----------------------
 # Helm provider
-# -----------------------
 provider "helm" {
   kubernetes {
     host                   = data.aws_eks_cluster.this.endpoint
@@ -92,17 +77,13 @@ provider "helm" {
   }
 }
 
-# -----------------------
 # ECR
-# -----------------------
 module "ecr" {
   source          = "./modules/ecr"
   repository_name = "django-app"
 }
 
-# -----------------------
 # Jenkins
-# -----------------------
 module "jenkins" {
   source             = "./modules/jenkins"
   namespace          = "jenkins"
@@ -115,9 +96,7 @@ module "jenkins" {
   ]
 }
 
-# -----------------------
 # Argo CD
-# -----------------------
 module "argo_cd" {
   source        = "./modules/argo_cd"
   namespace     = "argocd"
