@@ -41,6 +41,11 @@ module "vpc" {
   private_subnets = ["10.0.11.0/24", "10.0.12.0/24"]
 }
 
+# Public IP automatisch abholen
+data "http" "my_ip" {
+  url = "https://api.ipify.org"
+}
+
 # EKS
 module "eks" {
   source = "./modules/eks"
@@ -48,6 +53,10 @@ module "eks" {
   cluster_name    = "demo-eks"
   vpc_id          = module.vpc.vpc_id
   private_subnets = module.vpc.private_subnets
+
+  cluster_endpoint_public_access       = true
+  cluster_endpoint_private_access      = true
+  cluster_endpoint_public_access_cidrs = ["${chomp(data.http.my_ip.body)}/32"]
 }
 
 # Дані про EKS для kube/helm
