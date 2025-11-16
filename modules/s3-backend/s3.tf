@@ -9,6 +9,8 @@ resource "aws_s3_bucket_versioning" "tf_state" {
   versioning_configuration {
     status = "Enabled"
   }
+
+  force_destroy = true
 }
   
 # Шифрування бакета (AES-256)
