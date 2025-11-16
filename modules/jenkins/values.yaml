@@ -1,0 +1,42 @@
+controller:
+  adminUser: admin
+  adminPassword: admin123 # для реальних кейсів – через secret
+
+  jenkinsUrl: "http://jenkins.jenkins.svc.cluster.local:8080"
+
+  installPlugins:
+    - kubernetes:4203.v1dd44f5b_1cf9
+    - workflow-aggregator:590.v6a_d052e5a_a_b_5
+    - git:5.1.0
+    - configuration-as-code:1810.v9b_c30a_249a_4
+
+  JCasC:
+    defaultConfig: true
+    configScripts:
+      k8s-agent: |
+        jenkins:
+          clouds:
+            - kubernetes:
+                name: "kubernetes"
+                namespace: "jenkins"
+                jenkinsUrl: "http://jenkins.jenkins.svc.cluster.local:8080"
+                jenkinsUrlCredentialsId: ""
+                containerCapStr: "10"
+                templates:
+                  - name: "kaniko-agent"
+                    namespace: "jenkins"
+                    label: "kaniko"
+                    containers:
+                      - name: "jnlp"
+                        image: "jenkins/inbound-agent:latest"
+                        ttyEnabled: true
+                        args: "${computer.jnlpmac} ${computer.name}"
+                      - name: "kaniko"
+                        image: "gcr.io/kaniko-project/executor:latest"
+                        command:
+                          - /busybox/cat
+                        tty: true
+                    volumes:
+                      - emptyDirVolume:
+                          mountPath: "/workspace"
+                          memory: false

@@ -1,0 +1,12 @@
+applications:
+  - name: django-app
+    namespace: django
+    repoURL: "https://github.com/your-org/django-env-repo.git"
+    targetRevision: main
+    path: "charts/django-app"
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+
+repositories: []
