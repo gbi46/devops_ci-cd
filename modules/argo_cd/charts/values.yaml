@@ -1,7 +1,7 @@
 applications:
   - name: django-app
     namespace: django
-    repoURL: "https://github.com/your-org/django-env-repo.git"
+    repoURL: "https://github.com/gbi46/env-repo.git"
     targetRevision: main
     path: "charts/django-app"
     syncPolicy:
