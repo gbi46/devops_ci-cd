@@ -56,7 +56,7 @@ module "rds_postgres" {
   base_parameters = {
     max_connections = "50"
     log_statement   = "none"
-    work_mem        = "4MB"
+    work_mem        = "4096"
   }
 
   tags = {

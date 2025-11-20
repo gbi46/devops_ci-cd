@@ -42,11 +42,11 @@ module "rds" {
   base_parameters = {
     max_connections = "300"
     log_statement   = "none"
-    work_mem        = "8MB"
+    work_mem        = "8192"
   }
   # Можна перевизначити/додати поверх базових:
   extra_parameters = {
-    work_mem = "16MB"
+    work_mem = "16384"
   }
 
   tags = {
