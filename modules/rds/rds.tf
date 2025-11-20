@@ -21,7 +21,6 @@ resource "aws_db_instance" "this" {
 
   deletion_protection          = var.deletion_protection
   backup_retention_period      = var.backup_retention_period
-  preferred_backup_window      = var.preferred_backup_window
   maintenance_window           = var.preferred_maintenance_window
   copy_tags_to_snapshot        = true
   auto_minor_version_upgrade   = true
