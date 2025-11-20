@@ -64,11 +64,14 @@ resource "aws_rds_cluster_parameter_group" "aurora" {
   name   = "${var.name}-aurora-pg"
   family = local.parameter_group_family
   dynamic "parameter" {
-    for_each = local.merged_parameters
+    for_each = {
+      for k, v in local.merged_parameters :
+      k => { name = k, value = v, apply_method = "pending-reboot" }
+    }
     content {
-      name  = parameter.key
-      value = parameter.value
-      apply_method = "pending-reboot"
+      name  = parameter.value.name
+      value = parameter.value.value
+      apply_method = parameter.value.apply_method
     }
   }
   tags = local.common_tags
@@ -79,10 +82,14 @@ resource "aws_db_parameter_group" "rds" {
   name   = "${var.name}-rds-pg"
   family = local.parameter_group_family
   dynamic "parameter" {
-    for_each = local.merged_parameters
+    for_each = {
+      for k, v in local.merged_parameters :
+      k => { name = k, value = v, apply_method = "pending-reboot" }
+    }
     content {
-      name  = parameter.key
-      value = parameter.value
+      name  = parameter.value.name
+      value = parameter.value.value
+      apply_method = parameter.value.apply_method
     }
   }
   tags = local.common_tags
