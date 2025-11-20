@@ -8,26 +8,21 @@
 output "endpoint" {
   description = "Основний endpoint бази даних (RDS або Aurora writer)."
 
-  value = var.use_aurora
-    ? aws_rds_cluster.this[0].endpoint
-    : aws_db_instance.this[0].address
+  value = var.use_aurora ? aws_rds_cluster.this[0].endpoint : aws_db_instance.this[0].address
 }
 
 # Reader endpoint тільки для Aurora (для RDS буде null)
 output "reader_endpoint" {
   description = "Reader endpoint для Aurora, якщо use_aurora = true, інакше null."
 
-  value = var.use_aurora
-    ? aws_rds_cluster.this[0].reader_endpoint
-    : null
+  value = var.use_aurora ? aws_rds_cluster.this[0].reader_endpoint : null
 }
 
 # Порт БД
 output "port" {
   description = "Порт бази даних."
-  value = var.use_aurora
-    ? aws_rds_cluster.this[0].port
-    : aws_db_instance.this[0].port
+
+  value = var.use_aurora ? aws_rds_cluster.this[0].port : aws_db_instance.this[0].port
 }
 
 # Назва бази (беремо зі змінної)
@@ -49,26 +44,20 @@ output "master_username" {
 output "arn" {
   description = "ARN створеної БД (RDS instance або Aurora cluster)."
 
-  value = var.use_aurora
-    ? aws_rds_cluster.this[0].arn
-    : aws_db_instance.this[0].arn
+  value = var.use_aurora ? aws_rds_cluster.this[0].arn : aws_db_instance.this[0].arn
 }
 
 output "id" {
   description = "ID створеної БД (RDS instance або Aurora cluster)."
 
-  value = var.use_aurora
-    ? aws_rds_cluster.this[0].id
-    : aws_db_instance.this[0].id
+  value = var.use_aurora ? aws_rds_cluster.this[0].id : aws_db_instance.this[0].id
 }
 
 # Для Aurora: ID writer-інстансу
 output "writer_instance_id" {
   description = "ID writer-інстансу Aurora (якщо use_aurora = true), інакше null."
 
-  value = var.use_aurora
-    ? aws_rds_cluster_instance.writer[0].id
-    : null
+  value = var.use_aurora ? aws_rds_cluster_instance.writer[0].id : null
 }
 
 #############################################
@@ -88,7 +77,5 @@ output "db_subnet_group_name" {
 output "parameter_group_name" {
   description = "Назва DB Parameter Group / Cluster Parameter Group, який використовується для БД."
 
-  value = var.use_aurora
-    ? aws_rds_cluster_parameter_group.aurora[0].name
-    : aws_db_parameter_group.rds.name
+  value = var.use_aurora ? aws_rds_cluster_parameter_group.aurora[0].name : aws_db_parameter_group.rds[0].name
 }
