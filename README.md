@@ -57,10 +57,11 @@
       - або змінити тип сервісу на LoadBalancer,
 
       - або зробити 
-   
-   ```bash
+      
+```bash
    kubectl port-forward svc/jenkins 8080:8080 -n jenkins
 
+```text
    Залогінитись (якщо не міняв values.yaml):
 
    user: admin
