@@ -68,6 +68,7 @@ resource "aws_rds_cluster_parameter_group" "aurora" {
     content {
       name  = parameter.key
       value = parameter.value
+      apply_method = "pending-reboot"
     }
   }
   tags = local.common_tags
