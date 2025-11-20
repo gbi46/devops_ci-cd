@@ -40,7 +40,7 @@ locals {
   subnet_ids_first_two = slice(data.aws_subnets.in_default.ids, 0, 2)
 }
 
-module "rds" {
+module "rds_postgres" {
   source = "./modules/rds"
 
   use_aurora = false
