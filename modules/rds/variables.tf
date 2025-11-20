@@ -99,8 +99,8 @@ variable "ingress_cidr_blocks" {
   default     = []
 }
 
-variable "ingress_security_group_ids" {
-  description = "Список SG, яким дозволено доступ."
+variable "source_security_group_ids" {
+  description = "Список Security Group IDs, яким дозволено доступ до БД."
   type        = list(string)
   default     = []
 }
