@@ -1,156 +1,185 @@
+#############################################
+# Основні параметри модуля
+#############################################
+
 variable "use_aurora" {
-  description = "Якщо true — піднімаємо Aurora (cluster + writer). Якщо false — звичайну RDS instance."
+  description = "Якщо true — створюється Aurora Cluster; якщо false — звичайна RDS instance."
   type        = bool
   default     = false
 }
 
 variable "name" {
-  description = "Базове ім'я ресурсів (префікс). Напр., project-env-db"
+  description = "Базове ім'я ресурсу (префікс), буде використано для всіх RDS/Aurora ресурсів."
   type        = string
 }
 
 variable "vpc_id" {
-  description = "ID VPC для Security Group"
+  description = "ID VPC, у якій створюється Security Group."
   type        = string
 }
 
 variable "subnet_ids" {
-  description = "Список приватних subnet'ів для DB Subnet Group"
+  description = "Список приватних subnet'ів, які будуть використані для DB Subnet Group."
   type        = list(string)
 }
 
+#############################################
+# Налаштування бази даних
+#############################################
+
 variable "engine" {
-  description = "Тип БД: напр., postgres, mysql, aurora-postgresql, aurora-mysql"
+  description = "Тип бази: postgres, mysql, aurora-postgresql, aurora-mysql."
   type        = string
-  default     = "postgres"
 }
 
 variable "engine_version" {
-  description = "Версія engine. Напр., 14.11, 15.5, 8.0.mysql_aurora.3.06.0"
+  description = "Версія бази даних. Наприклад: 15.5."
   type        = string
-  default     = "14.11"
 }
 
 variable "instance_class" {
-  description = "Клас інстансу для RDS або Aurora Instances. Напр., db.t4g.medium"
+  description = "Клас інстансу (наприклад db.t3.micro, db.r6g.large)."
   type        = string
-  default     = "db.t4g.medium"
 }
 
 variable "multi_az" {
-  description = "Multi-AZ для звичайної RDS (на Aurora не впливає)"
+  description = "Чи створювати Multi-AZ RDS (не працює для Aurora)."
   type        = bool
   default     = false
 }
 
 variable "allocated_storage" {
-  description = "Обсяг у GiB для звичайної RDS. Для Aurora ігнорується."
+  description = "Обсяг диску (у GB) для звичайної RDS."
   type        = number
   default     = 20
 }
 
 variable "max_allocated_storage" {
-  description = "Автоскейл storage для звичайної RDS (GiB). 0 — вимкнено."
+  description = "Максимальний autoscaling диску для RDS."
   type        = number
   default     = 0
 }
 
 variable "storage_type" {
-  description = "Тип диска для звичайної RDS: gp3, gp2 тощо"
+  description = "Тип диску: gp3, gp2 тощо."
   type        = string
   default     = "gp3"
 }
 
 variable "db_name" {
-  description = "Ім'я початкової бази даних"
+  description = "Назва бази даних."
+  type        = string
+}
+
+variable "master_username" {
+  description = "Им'я користувача бази даних."
   type        = string
   default     = "app"
 }
 
-variable "master_username" {
-  description = "Користувач БД"
-  type        = string
-  default     = "dbadmin"
-}
-
 variable "master_password" {
-  description = "Пароль БД (краще передавати з CI або через TF_VAR_... / SSM / Secrets Manager)"
+  description = "Пароль користувача БД."
   type        = string
   sensitive   = true
 }
 
 variable "port" {
-  description = "Порт БД (5432 для Postgres, 3306 для MySQL)"
+  description = "Порт бази даних."
   type        = number
   default     = 5432
 }
 
-variable "publicly_accessible" {
-  description = "Дозволити публічний доступ до інстансу/вузлів (небажано у проді)"
-  type        = bool
-  default     = false
-}
+#############################################
+# Доступи (Security Group)
+#############################################
 
 variable "ingress_cidr_blocks" {
-  description = "Список CIDR, яким дозволено підключення до БД"
+  description = "Список CIDR блоків, яким дозволено доступ до бази даних."
   type        = list(string)
   default     = []
 }
 
-variable "source_security_group_ids" {
-  description = "Альтернатива CIDR: SG-ідентифікатори, яким можна конектитись до БД"
+variable "ingress_security_group_ids" {
+  description = "Список SG, яким дозволено доступ."
   type        = list(string)
   default     = []
 }
 
-variable "parameter_group_family" {
-  description = "Сімейство параметрів для Parameter Group. Якщо null — обчислюється для Postgres/Aurora-Postgres/MySQL 8.0."
-  type        = string
-  default     = null
-}
+#############################################
+# Parameter Group
+#############################################
 
 variable "base_parameters" {
-  description = "Базові параметри для Parameter Group (name => value). Дефолт під Postgres."
+  description = "Базові параметри для parameter group."
   type        = map(string)
   default = {
-    max_connections = "200"
+    max_connections = "100"
     log_statement   = "none"
     work_mem        = "4096"
   }
 }
 
 variable "extra_parameters" {
-  description = "Додаткові параметри (name => value), щоб перевизначити/додати поверх base_parameters."
+  description = "Додаткові параметри (override для base_parameters)."
   type        = map(string)
   default     = {}
 }
 
-variable "deletion_protection" {
-  description = "Увімкнути захист від видалення"
+variable "parameter_group_family" {
+  description = "Явне family для parameter group (наприклад postgres15). Якщо null – визначається автоматично."
+  type        = string
+  default     = null
+}
+
+#############################################
+# Налаштування доступності / безпеки
+#############################################
+
+variable "publicly_accessible" {
+  description = "Чи буде RDS доступна з інтернету."
   type        = bool
   default     = false
 }
 
+variable "deletion_protection" {
+  description = "Захист від видалення."
+  type        = bool
+  default     = false
+}
+
+#############################################
+# Резервне копіювання
+#############################################
+
 variable "backup_retention_period" {
-  description = "Кількість днів зберігання бекапів (0 — вимкнено)"
+  description = "Кількість днів зберігання бекапів."
   type        = number
-  default     = 1
+  default     = 7
 }
 
 variable "preferred_backup_window" {
-  description = "Вікно бекапів, напр. 02:00-03:00"
+  description = "Вікно бекапів, наприклад 02:00-03:00."
   type        = string
   default     = "02:00-03:00"
 }
 
+#############################################
+# Обслуговування
+#############################################
+
 variable "preferred_maintenance_window" {
-  description = "Вікно обслуговування, напр. sun:03:00-sun:04:00"
+  description = "Вікно maintenance, наприклад sun:03:00-sun:04:00."
   type        = string
   default     = "sun:03:00-sun:04:00"
 }
 
+#############################################
+# Теги
+#############################################
+
 variable "tags" {
-  description = "Додаткові теги"
+  description = "Додаткові теги для всіх ресурсів."
   type        = map(string)
   default     = {}
 }
+
