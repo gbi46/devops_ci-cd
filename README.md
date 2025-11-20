@@ -1,130 +1,173 @@
 # Demo: Terraform + EKS + Jenkins + Argo CD + Helm + GitOps
 
+Цей репозиторій демонструє повний GitOps-ланцюжок:\
+**Terraform** ➜ **AWS (VPC, EKS, ECR)** ➜ **Jenkins (CI)** ➜ **Argo CD +
+Helm (CD)**.
+
+------------------------------------------------------------------------
+
 ## 1. Передумови
 
-- AWS акаунт, налаштований `aws configure`
-- Terraform >= 1.5
-- kubectl, helm
-- GitHub/GitLab репозиторії:
-  - **env-repo** – з Helm-чартом `charts/django-app`, який дивиться Argo CD
+-   AWS акаунт, налаштований через `aws configure`
+-   Встановлені:
+    -   `terraform` (версія ≥ 1.5)
+    -   `kubectl`
+    -   `helm`
+-   GitHub/GitLab репозиторії:
+    -   **env-repo** -- репозиторій із Helm-чартом `charts/django-app`,
+        який відстежує Argo CD
+
+------------------------------------------------------------------------
 
 ## 2. Порядок запуску інфраструктури
 
-> S3 та DynamoDB використовуються як бекенд для Terraform стейту. При повному `terraform destroy` вони теж будуть видалені.
+> **Примітка:** S3 та DynamoDB використовуються як бекенд для Terraform
+> стейту.\
+> При повному `terraform destroy` вони також будуть видалені.
 
-1. **Ініціалізація локально (без бекенду S3)**  
-   Тимчасово закоментуйте `backend "s3"` у `backend.tf` і запустіть:
+### 2.1. Ініціалізація локально (без бекенду S3)
 
-   ```bash
-   terraform init
-   terraform apply -target=module.s3_backend
+Тимчасово закоментуйте блок:
 
-2. **Увімкнути бекенд S3**
-   Після створення бакета та таблиці – розкоментуйте backend "s3" у backend.tf,
-   виконайте:
+``` hcl
+backend "s3" {
+  ...
+}
+```
 
-   ```bash
-   terraform init -migrate-state
+у файлі `backend.tf`, а потім виконайте:
 
-3. **Створення всієї інфраструктури**
+``` bash
+terraform init
+terraform apply -target=module.s3_backend
+```
 
-   ```bash
-   terraform apply
+Це створить S3-бакет і DynamoDB-таблицю для бекенду Terraform.
 
-   Це створить:
+------------------------------------------------------------------------
 
-    - VPC + підмережі
+### 2.2. Увімкнути бекенд S3
 
-    - EKS кластер
+Після створення бакета та таблиці --- **розкоментуйте** блок
+`backend "s3"` у `backend.tf` і виконайте міграцію стейту:
 
-    - ECR репозиторій
+``` bash
+terraform init -migrate-state
+```
 
-    - Jenkins (через Helm)
+------------------------------------------------------------------------
 
-    - Argo CD (через Helm)
+### 2.3. Створення всієї інфраструктури
 
-    - Argo CD Application, що стежить за charts/django-app з env-repo
+Запустіть:
 
-4. **Налаштування jenkins**
+``` bash
+terraform apply
+```
 
-   Дізнатися URL (внутрішній сервіс)
+Це створить:
 
-   ```bash
-   kubectl get svc -n jenkins
+-   VPC + підмережі\
+-   EKS кластер\
+-   ECR репозиторій\
+-   Jenkins (через Helm)\
+-   Argo CD (через Helm)\
+-   Argo CD Application, що стежить за `charts/django-app` з
+    **env-repo**
+
+------------------------------------------------------------------------
+
+## 3. Налаштування Jenkins
+
+### 3.1. Дізнатись URL сервісу Jenkins
+
+``` bash
+kubectl get svc -n jenkins
+```
 
 Для доступу ззовні:
 
-   - або змінити тип сервісу на LoadBalancer,
+-   або змінити тип сервісу на `LoadBalancer`,
+-   або використати `port-forward`:
 
-   - або зробити 
-      
-   ```bash
-      kubectl port-forward svc/jenkins 8080:8080 -n jenkins
+``` bash
+kubectl port-forward svc/jenkins 8080:8080 -n jenkins
+```
 
+### 3.2. Логін у Jenkins
 
-Залогінитись (якщо не міняв values.yaml):
+Якщо не змінювали `values.yaml`:
 
-user: admin
+    user: admin
+    password: admin123
 
-password: admin123
+Створіть Pipeline або Multibranch Pipeline й вкажіть репозиторій з
+Jenkinsfile.
 
-Створити Pipeline job (або Multibranch) і вказати репозиторій з Jenkinsfile.
+------------------------------------------------------------------------
 
-5. **Як перевірити Jenkins job**
+## 4. Як перевірити Jenkins job
 
-Запустити job.
+Після запуску job у логах мають бути:
 
-У логах побачиш:
+-   Build & Push Image with Kaniko\
+-   Update Helm values in env repo
 
-- стадію Build & Push Image with Kaniko з пушем в ECR
+### 4.1. Перевірка env-repo
 
-- стадію Update Helm values in env repo – комміт в env-repo.
+Переконайтесь, що у файлі:
 
-Перевір, що в env-repo:
+    charts/django-app/values.yaml
 
-файл charts/django-app/values.yaml має оновлений .image.tag на GIT_COMMIT.
+тег оновився на актуальний `GIT_COMMIT`.
 
-Переконайся, що імідж є в ECR:
+### 4.2. Перевірка ECR
 
-   aws ecr list-images --repository-name django-app
+``` bash
+aws ecr list-images --repository-name django-app
+```
 
-6. **Як побачити результат в Argo CD**
+------------------------------------------------------------------------
 
-Отримати URL Argo CD server:
+## 5. Як побачити результат в Argo CD
 
-   kubectl get svc -n argocd
+### 5.1. Отримати URL
 
+``` bash
+kubectl get svc -n argocd
+```
 
-Якщо сервер типу LoadBalancer – бери external IP. Якщо ClusterIP – port-forward:
+При ClusterIP:
 
-   kubectl port-forward svc/argo-cd-argocd-server -n argocd 8081:80
+``` bash
+kubectl port-forward svc/argo-cd-argocd-server -n argocd 8081:80
+```
 
-Відкрий http://localhost:8081
+Argo CD буде доступний на:\
+http://localhost:8081
 
-Логін (дефолт, якщо не міняв):
+### 5.2. Логін
 
-user: admin
+``` bash
+kubectl -n argocd get secret argocd-initial-admin-secret   -o jsonpath="{.data.password}" | base64 -d
+```
 
-пароль: з secret
+### 5.3. Перевірка Application
 
-   kubectl -n argocd get secret argocd-initial-admin-secret \
-   -o jsonpath="{.data.password}" | base64 -d
+-   OutOfSync після комміту\
+-   Synced після автосинхронізації
 
+### 5.4. Перевірка деплою
 
-В Argo CD має бути Application django-app.
-Статус:
+``` bash
+kubectl get pods -n django
+kubectl get svc -n django
+```
 
-OutOfSync одразу після комміту.
+------------------------------------------------------------------------
 
-Має перейти в Synced після автосинхронізації.
+## 6. Видалення
 
-Перевір деплой у кластері:
-
-   kubectl get pods -n django
-   kubectl get svc -n django
-
-6. **Видалення ресурсів**
-
-Щоб уникнути зайвих витрат у хмарі:
-
-   terraform destroy
+``` bash
+terraform destroy
+```
