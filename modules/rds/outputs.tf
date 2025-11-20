@@ -30,7 +30,7 @@ output "port" {
     : aws_db_instance.this[0].port
 }
 
-# Назва бази даних (беремо з змінної, щоб не паритись з різними полями)
+# Назва бази (беремо зі змінної)
 output "database_name" {
   description = "Назва бази даних."
   value       = var.db_name
@@ -62,7 +62,7 @@ output "id" {
     : aws_db_instance.this[0].id
 }
 
-# Для Aurora ще можна вивести ID writer instance (зручно)
+# Для Aurora: ID writer-інстансу
 output "writer_instance_id" {
   description = "ID writer-інстансу Aurora (якщо use_aurora = true), інакше null."
 
@@ -72,7 +72,7 @@ output "writer_instance_id" {
 }
 
 #############################################
-# Мережеві ресурси (SG, Subnet Group, Parameter Group)
+# Мережа: SG, Subnet Group, Parameter Group
 #############################################
 
 output "security_group_id" {
@@ -85,12 +85,10 @@ output "db_subnet_group_name" {
   value       = aws_db_subnet_group.this.name
 }
 
-# Для Aurora використовується aws_rds_cluster_parameter_group.aurora
-# Для звичайної RDS — aws_db_parameter_group.this (перевір, що саме так називається ресурс у shared.tf)
 output "parameter_group_name" {
-  description = "Назва parameter group, який використовується для БД."
+  description = "Назва DB Parameter Group / Cluster Parameter Group, який використовується для БД."
 
   value = var.use_aurora
     ? aws_rds_cluster_parameter_group.aurora[0].name
-    : aws_db_parameter_group.this.name
+    : aws_db_parameter_group.rds.name
 }
