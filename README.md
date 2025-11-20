@@ -52,16 +52,16 @@
    ```bash
    kubectl get svc -n jenkins
 
-   Для доступу ззовні:
+Для доступу ззовні:
 
-      - або змінити тип сервісу на LoadBalancer,
+   - або змінити тип сервісу на LoadBalancer,
 
-      - або зробити 
+   - або зробити 
       
-```bash
-   kubectl port-forward svc/jenkins 8080:8080 -n jenkins
+   ```bash
+      kubectl port-forward svc/jenkins 8080:8080 -n jenkins
 
-```text
+
    Залогінитись (якщо не міняв values.yaml):
 
    user: admin
@@ -99,40 +99,34 @@
 
    Якщо сервер типу LoadBalancer – бери external IP. Якщо ClusterIP – port-forward:
 
-   ```bash
    kubectl port-forward svc/argo-cd-argocd-server -n argocd 8081:80
 
-
-   І відкрий http://localhost:8081.
+   Відкрий http://localhost:8081
 
    Логін (дефолт, якщо не міняв):
 
-    user: admin
+   user: admin
 
-    пароль: з secret:
+   пароль: з secret
 
-    ```bash
-    kubectl -n argocd get secret argocd-initial-admin-secret \
-    -o jsonpath="{.data.password}" | base64 -d
+   kubectl -n argocd get secret argocd-initial-admin-secret \
+   -o jsonpath="{.data.password}" | base64 -d
 
 
-    В Argo CD має бути Application django-app.
-    Статус:
+В Argo CD має бути Application django-app.
+Статус:
 
-    OutOfSync одразу після комміту.
+OutOfSync одразу після комміту.
 
-    Має перейти в Synced після автосинхронізації.
+Має перейти в Synced після автосинхронізації.
 
-    Перевір деплой у кластері:
+Перевір деплой у кластері:
 
-    ```bash
-
-    kubectl get pods -n django
-    kubectl get svc -n django
+   kubectl get pods -n django
+   kubectl get svc -n django
 
 6. **Видалення ресурсів**
 
-    Щоб уникнути зайвих витрат у хмарі:
+Щоб уникнути зайвих витрат у хмарі:
 
-    ```bash
-    terraform destroy
+   terraform destroy
