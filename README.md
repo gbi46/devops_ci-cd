@@ -14,7 +14,7 @@ Helm (CD)**.
     -   `kubectl`
     -   `helm`
 -   GitHub/GitLab репозиторії:
-    -   **env-repo** -- репозиторій із Helm-чартом `charts/django-app`,
+    -   **app-repo** -- репозиторій із Helm-чартом `charts/django-app`,
         який відстежує Argo CD
 
 ------------------------------------------------------------------------
@@ -73,7 +73,7 @@ terraform apply
 -   Jenkins (через Helm)\
 -   Argo CD (через Helm)\
 -   Argo CD Application, що стежить за `charts/django-app` з
-    **env-repo**
+    **app-repo**
 
 ------------------------------------------------------------------------
 
@@ -113,7 +113,7 @@ Jenkinsfile.
 -   Build & Push Image with Kaniko\
 -   Update Helm values in env repo
 
-### 4.1. Перевірка env-repo
+### 4.1. Перевірка app-repo
 
 Переконайтесь, що у файлі:
 
