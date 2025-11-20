@@ -24,7 +24,7 @@ module "rds" {
 
   # Engine/версії/клас
   engine         = "postgres"             # або mysql / aurora-postgresql / aurora-mysql
-  engine_version = "14.11"
+  engine_version = "14.20"
   instance_class = "db.t4g.medium"
   multi_az       = true                   # тільки для звичайної RDS
 
