@@ -49,7 +49,7 @@ module "rds_postgres" {
   subnet_ids = local.subnet_ids_first_two
 
   engine         = "postgres"
-  engine_version = "15.3"
+  engine_version = "15"
   instance_class = "db.t3.micro"
   multi_az       = false
 

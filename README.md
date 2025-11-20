@@ -53,7 +53,7 @@ module "rds_postgres" {
   subnet_ids = module.vpc.private_subnets
 
   engine         = "postgres"
-  engine_version = "15.5"
+  engine_version = "15"
   instance_class = "db.t3.micro"
   multi_az       = false
 
