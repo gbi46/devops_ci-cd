@@ -62,52 +62,50 @@
       kubectl port-forward svc/jenkins 8080:8080 -n jenkins
 
 
-   Залогінитись (якщо не міняв values.yaml):
+Залогінитись (якщо не міняв values.yaml):
 
-   user: admin
+user: admin
 
-   password: admin123
+password: admin123
 
-   Створити Pipeline job (або Multibranch) і вказати репозиторій з Jenkinsfile.
+Створити Pipeline job (або Multibranch) і вказати репозиторій з Jenkinsfile.
 
 5. **Як перевірити Jenkins job**
 
-   Запустити job.
+Запустити job.
 
-   У логах побачиш:
+У логах побачиш:
 
-   - стадію Build & Push Image with Kaniko з пушем в ECR
+- стадію Build & Push Image with Kaniko з пушем в ECR
 
-   - стадію Update Helm values in env repo – комміт в env-repo.
+- стадію Update Helm values in env repo – комміт в env-repo.
 
-   Перевір, що в env-repo:
+Перевір, що в env-repo:
 
-  файл charts/django-app/values.yaml має оновлений .image.tag на GIT_COMMIT.
+файл charts/django-app/values.yaml має оновлений .image.tag на GIT_COMMIT.
 
-  Переконайся, що імідж є в ECR:
+Переконайся, що імідж є в ECR:
 
-  ```bash
-  aws ecr list-images --repository-name django-app
+   aws ecr list-images --repository-name django-app
 
 6. **Як побачити результат в Argo CD**
 
-   Отримати URL Argo CD server:
+Отримати URL Argo CD server:
 
-   ```bash
    kubectl get svc -n argocd
 
 
-   Якщо сервер типу LoadBalancer – бери external IP. Якщо ClusterIP – port-forward:
+Якщо сервер типу LoadBalancer – бери external IP. Якщо ClusterIP – port-forward:
 
    kubectl port-forward svc/argo-cd-argocd-server -n argocd 8081:80
 
-   Відкрий http://localhost:8081
+Відкрий http://localhost:8081
 
-   Логін (дефолт, якщо не міняв):
+Логін (дефолт, якщо не міняв):
 
-   user: admin
+user: admin
 
-   пароль: з secret
+пароль: з secret
 
    kubectl -n argocd get secret argocd-initial-admin-secret \
    -o jsonpath="{.data.password}" | base64 -d
