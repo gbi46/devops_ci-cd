@@ -54,21 +54,18 @@
 
    Для доступу ззовні:
 
-   - або змінити тип сервісу на LoadBalancer,
+      - або змінити тип сервісу на LoadBalancer,
 
-   - або зробити kubectl port-forward svc/jenkins 8080:8080 -n jenkins.
+      - або зробити 
+   
+   ```bash
+   kubectl port-forward svc/jenkins 8080:8080 -n jenkins
 
    Залогінитись (якщо не міняв values.yaml):
 
-    user: admin
+   user: admin
 
-    password: admin123
-
-   Налаштувати credentials:
-
-    ```bash
-    aws-credentials – тип AWS Credentials / або звичайні env.
-    git-credentials – Username/Password або Token для env-repo.
+   password: admin123
 
    Створити Pipeline job (або Multibranch) і вказати репозиторій з Jenkinsfile.
 
