@@ -5,14 +5,14 @@ locals {
   version_major = regex("^([0-9]+)", var.engine_version)
   family_guess = (
     contains(["postgres", "aurora-postgresql"], var.engine) ?
-      "${var.engine == "postgres" ? "postgres" : "aurora-postgresql"}${local.version_major[0]}" :
+    "${var.engine == "postgres" ? "postgres" : "aurora-postgresql"}${local.version_major[0]}" :
     contains(["mysql", "aurora-mysql"], var.engine) ?
-      "mysql8.0" : null
+    "mysql8.0" : null
   )
   parameter_group_family = coalesce(var.parameter_group_family, local.family_guess)
 
   common_tags = merge({
-    "Name" = var.name
+    "Name"   = var.name
     "Module" = "rds"
   }, var.tags)
 }
@@ -69,8 +69,8 @@ resource "aws_rds_cluster_parameter_group" "aurora" {
       k => { name = k, value = v, apply_method = "pending-reboot" }
     }
     content {
-      name  = parameter.value.name
-      value = parameter.value.value
+      name         = parameter.value.name
+      value        = parameter.value.value
       apply_method = parameter.value.apply_method
     }
   }
@@ -87,8 +87,8 @@ resource "aws_db_parameter_group" "rds" {
       k => { name = k, value = v, apply_method = "pending-reboot" }
     }
     content {
-      name  = parameter.value.name
-      value = parameter.value.value
+      name         = parameter.value.name
+      value        = parameter.value.value
       apply_method = parameter.value.apply_method
     }
   }

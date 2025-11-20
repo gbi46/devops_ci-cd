@@ -43,24 +43,24 @@ locals {
 module "rds_postgres" {
   source = "./modules/rds"
 
-  use_aurora   = false
-  name         = "demo-dev-postgres"
-  vpc_id       = data.aws_vpc.default.id
-  subnet_ids   = local.subnet_ids_first_two
+  use_aurora = false
+  name       = "demo-dev-postgres"
+  vpc_id     = data.aws_vpc.default.id
+  subnet_ids = local.subnet_ids_first_two
 
   engine         = "postgres"
-  engine_version = "14.11"
+  engine_version = "14.20"
   instance_class = "db.t3.micro"
   multi_az       = false
 
-  db_name          = "app"
-  master_username  = "dbadmin"
-  master_password  = var.db_password
+  db_name         = "app"
+  master_username = "dbadmin"
+  master_password = var.db_password
 
-  port                 = 5432
-  publicly_accessible  = false
+  port                = 5432
+  publicly_accessible = false
   # дозволь підключення зі свого IP, ЗАМІНИ на свій /32
-  ingress_cidr_blocks  = ["95.90.200.245/32"]
+  ingress_cidr_blocks = ["95.90.200.245/32"]
 
   base_parameters = {
     max_connections = "50"

@@ -35,23 +35,23 @@ locals {
 module "rds_postgres" {
   source = "./modules/rds"
 
-  use_aurora   = false
-  name         = "demo-dev-postgres"
-  vpc_id       = local.vpc_id_final
-  subnet_ids   = local.subnet_ids_final
+  use_aurora = false
+  name       = "demo-dev-postgres"
+  vpc_id     = local.vpc_id_final
+  subnet_ids = local.subnet_ids_final
 
   engine         = "postgres"
   engine_version = "14.11"
   instance_class = "db.t3.micro"
   multi_az       = false
 
-  db_name          = "app"
-  master_username  = "dbadmin"
-  master_password  = var.db_password
+  db_name         = "app"
+  master_username = "dbadmin"
+  master_password = var.db_password
 
-  port                 = 5432
-  publicly_accessible  = false
-  ingress_cidr_blocks  = var.ingress_cidrs # напр. ["YOUR.PUBLIC.IP.0/32"]
+  port                = 5432
+  publicly_accessible = false
+  ingress_cidr_blocks = var.ingress_cidrs # напр. ["YOUR.PUBLIC.IP.0/32"]
 
   base_parameters = {
     max_connections = "50"
@@ -69,21 +69,21 @@ module "rds_postgres" {
 module "rds_aurora_pg" {
   source = "./modules/rds"
 
-  use_aurora   = true
-  name         = "demo-dev-aurora-pg"
-  vpc_id       = local.vpc_id_final
-  subnet_ids   = local.subnet_ids_final
+  use_aurora = true
+  name       = "demo-dev-aurora-pg"
+  vpc_id     = local.vpc_id_final
+  subnet_ids = local.subnet_ids_final
 
   engine         = "aurora-postgresql"
   engine_version = "15.4"
   instance_class = "db.r6g.large"
 
-  db_name          = "app"
-  master_username  = "dbadmin"
-  master_password  = var.db_password
+  db_name         = "app"
+  master_username = "dbadmin"
+  master_password = var.db_password
 
-  port                 = 5432
-  publicly_accessible  = false
+  port                = 5432
+  publicly_accessible = false
   # раніше тут було: source_security_group_ids = [module.eks.node_sg_id]
   # приберемо залежність від EKS; для тесту достатньо ingress_cidr_blocks в модулі
 

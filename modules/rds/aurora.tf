@@ -1,22 +1,22 @@
 # Створюється лише якщо use_aurora = true
 resource "aws_rds_cluster" "this" {
-  count                          = var.use_aurora ? 1 : 0
-  cluster_identifier             = "${var.name}-cluster"
-  engine                         = var.engine               # aurora-postgresql або aurora-mysql
-  engine_version                 = var.engine_version
-  database_name                  = var.db_name
-  master_username                = var.master_username
-  master_password                = var.master_password
-  db_subnet_group_name           = aws_db_subnet_group.this.name
-  vpc_security_group_ids         = [aws_security_group.this.id]
-  port                           = var.port
-  deletion_protection            = var.deletion_protection
-  backup_retention_period        = var.backup_retention_period
-  preferred_backup_window        = var.preferred_backup_window
-  preferred_maintenance_window   = var.preferred_maintenance_window
-  apply_immediately              = true
-  storage_encrypted              = true
-  copy_tags_to_snapshot          = true
+  count                               = var.use_aurora ? 1 : 0
+  cluster_identifier                  = "${var.name}-cluster"
+  engine                              = var.engine # aurora-postgresql або aurora-mysql
+  engine_version                      = var.engine_version
+  database_name                       = var.db_name
+  master_username                     = var.master_username
+  master_password                     = var.master_password
+  db_subnet_group_name                = aws_db_subnet_group.this.name
+  vpc_security_group_ids              = [aws_security_group.this.id]
+  port                                = var.port
+  deletion_protection                 = var.deletion_protection
+  backup_retention_period             = var.backup_retention_period
+  preferred_backup_window             = var.preferred_backup_window
+  preferred_maintenance_window        = var.preferred_maintenance_window
+  apply_immediately                   = true
+  storage_encrypted                   = true
+  copy_tags_to_snapshot               = true
   iam_database_authentication_enabled = false
 
   # Параметри
