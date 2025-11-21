@@ -1,0 +1,16 @@
+applications:
+  - name: django-app
+    namespace: django
+    repoURL: https://github.com/gbi46/app-repo.git
+    path: charts/django-app
+    targetRevision: main
+
+  - name: monitoring
+    namespace: monitoring
+    repoURL: https://prometheus-community.github.io/helm-charts
+    path: kube-prometheus-stack
+    targetRevision: "56.9.0"
+
+repositories:
+  - name: prometheus-community
+    url: https://prometheus-community.github.io/helm-charts
