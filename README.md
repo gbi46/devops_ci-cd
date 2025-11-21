@@ -42,7 +42,14 @@ Terraform, EKS, RDS, ECR, Jenkins, Argo CD, Prometheus та Grafana.
 
 ### Ініціалізуйте Terraform
 
+Спочатку коментуємо конфіг в backend.tf, потім:
+
     terraform init
+    terraform apply -target=module.s3_backend
+
+Далі - розкоментуємо конфіг в backend.tf і
+
+    terraform init -migrate-state
 
 ### Перевірте змінні
 
