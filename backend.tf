@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket         = "lesson-8-9-tf-state-bucket-4"
+    bucket         = "ivcoder-tf-state-bucket"
     key            = "global/terraform.tfstate"
     region         = "eu-central-1"
     use_lockfile   = true
