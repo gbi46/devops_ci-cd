@@ -10,6 +10,3 @@ terraform {
 
 variable "tf_state_bucket" {}
 variable "tf_state_dynamodb_table" {}
-variable "region" {
-  default = "eu-central-1"
-}
