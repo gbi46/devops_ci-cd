@@ -25,18 +25,6 @@ resource "aws_eks_cluster" "this" {
   depends_on = [aws_iam_role.eks_cluster_role]
 }
 
-resource "aws_eks_node_group" "default" {
-  cluster_name    = aws_eks_cluster.this.name
-  node_group_name = "default-20251116165433129000000013"
-  node_role_arn   = aws_iam_role.node_role.arn
-  subnet_ids      = var.private_subnet_ids
-  scaling_config {
-    desired_size = 2
-    min_size     = 1
-    max_size     = 4
-  }
-}
-
 data "aws_iam_policy_document" "node_assume_role" {
   statement {
     actions = ["sts:AssumeRole"]
