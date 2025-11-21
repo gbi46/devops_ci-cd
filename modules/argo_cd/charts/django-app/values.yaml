@@ -1,0 +1,14 @@
+image:
+  repository: "<your-account-id>.dkr.ecr.<region>.amazonaws.com/demo-platform/django-app"
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+replicaCount: 2
+
+service:
+  type: ClusterIP
+  port: 8000
+
+env:
+  DJANGO_SETTINGS_MODULE: "app.settings.prod"
+  DATABASE_URL: "postgres://user:pass@host:5432/db"
