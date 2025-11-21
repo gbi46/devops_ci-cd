@@ -1,12 +1,9 @@
 terraform {
   backend "s3" {
-    bucket         = var.tf_state_bucket
+    bucket         = "demo-platform-tf-state"
     key            = "terraform/state/infra.tfstate"
-    region         = var.region
-    dynamodb_table = var.tf_state_dynamodb_table
+    region         = "eu-central-1"
+    use_lockfile   = true
     encrypt        = true
   }
 }
-
-variable "tf_state_bucket" {}
-variable "tf_state_dynamodb_table" {}
