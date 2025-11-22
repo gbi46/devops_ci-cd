@@ -5,7 +5,7 @@ resource "kubernetes_namespace" "argocd" {
 }
 
 resource "helm_release" "argocd" {
-  name       = "argo-cd"
+  name       = "argocd"
   namespace  = "argocd"
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argo-cd"
@@ -27,4 +27,5 @@ resource "helm_release" "argocd" {
 
   timeout      = 900
   force_update = true
+  depends_on = [kubernetes_namespace.argocd]
 }
