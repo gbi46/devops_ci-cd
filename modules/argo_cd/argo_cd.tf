@@ -5,7 +5,7 @@ resource "kubernetes_namespace" "argocd" {
 }
 
 resource "helm_release" "argocd" {
-  name       = "argocd"
+  name       = "platform-argocd"
   namespace  = "argocd"
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argo-cd"
@@ -22,6 +22,9 @@ resource "helm_release" "argocd" {
       configs:
         params:
           server.insecure: "true"
+      
+      redisSecretInit:
+        enabled: false
     EOT
   ]
 
