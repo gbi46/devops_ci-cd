@@ -103,6 +103,7 @@ module "argo_cd" {
 
   namespace   = "argocd"
   cluster_name = module.eks.cluster_name
+  argo_chart_version = var.argo_chart_version
 }
 
 output "jenkins_url" {
