@@ -1,3 +1,8 @@
+variable "argo_chart_version" {
+  type        = string
+  description = "Version of the Argo CD Helm chart"
+}
+
 variable "db_username" {
   description = "Master username for Aurora"
   type        = string
