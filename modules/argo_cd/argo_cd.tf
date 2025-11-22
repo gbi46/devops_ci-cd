@@ -25,8 +25,9 @@ resource "helm_release" "argocd" {
     EOT
   ]
 
-  timeout      = 900
-  force_update = true
-  replace      = true
+  timeout       = 900
+  force_update  = true
+  replace       = true
+  wait_for_jobs = false
   depends_on = [kubernetes_namespace.argocd]
 }
