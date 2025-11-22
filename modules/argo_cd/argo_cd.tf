@@ -27,5 +27,6 @@ resource "helm_release" "argocd" {
 
   timeout      = 900
   force_update = true
+  replace      = true
   depends_on = [kubernetes_namespace.argocd]
 }
