@@ -6,12 +6,25 @@ resource "kubernetes_namespace" "argocd" {
 
 resource "helm_release" "argocd" {
   name       = "argo-cd"
-  namespace  = kubernetes_namespace.argocd.metadata[0].name
+  namespace  = "argocd"
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argo-cd"
   version    = var.argo_chart_version
 
   values = [
-    file("${path.module}/values.yaml")
+    <<-EOT
+      server:
+        service:
+          type: ClusterIP
+        extraArgs:
+          - --insecure
+
+      configs:
+        params:
+          server.insecure: "true"
+    EOT
   ]
+
+  timeout      = 900
+  force_update = true
 }
