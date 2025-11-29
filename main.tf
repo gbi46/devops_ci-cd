@@ -73,7 +73,7 @@ module "eks" {
   source = "./modules/eks"
 
   cluster_name    = "demo-platform-eks"
-  cluster_version = "1.30"
+  cluster_version = "1.34"
 
   project_name   = "demo-platform"
   vpc_id         = module.vpc.vpc_id
