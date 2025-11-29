@@ -12,6 +12,12 @@ resource "helm_release" "jenkins" {
   chart            = "jenkins"
   version          = "4.9.0"
 
+  wait          = true
+  wait_for_jobs = true
+  timeout       = 900 
+  atomic        = true
+  cleanup_on_fail = true
+
   values = [
     file("${path.module}/values.yaml")
   ]
