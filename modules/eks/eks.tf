@@ -28,6 +28,11 @@ resource "aws_eks_cluster" "this" {
   depends_on = [aws_iam_role.eks_cluster_role]
 }
 
+resource "aws_eks_addon" "ebs_csi" {
+  cluster_name = aws_eks_cluster.this.name
+  addon_name   = "aws-ebs-csi-driver"
+}
+
 data "aws_iam_policy_document" "node_assume_role" {
   statement {
     actions = ["sts:AssumeRole"]
