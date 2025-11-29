@@ -80,6 +80,8 @@ module "eks" {
   private_subnet_ids = module.vpc.private_subnet_ids
   public_subnet_ids  = module.vpc.public_subnet_ids
 
+  eks_managed_node_groups = var.eks_managed_node_groups
+
   eks_managed_node_groups = {
     default = {
       min_size     = 1
@@ -88,9 +90,6 @@ module "eks" {
 
       instance_types = ["t3.medium"]
       capacity_type  = "ON_DEMAND"
-
-      # optional:
-      # disk_size = 50
     }
   }
 }
