@@ -15,11 +15,14 @@ data "aws_iam_policy_document" "eks_assume_role" {
 }
 
 resource "aws_eks_cluster" "this" {
-  name     = "${var.project_name}-eks"
+  name     = "${var.cluster_name}"
+  version  = "${var.cluster_version}"
   role_arn = aws_iam_role.eks_cluster_role.arn
 
   vpc_config {
     subnet_ids = concat(var.private_subnet_ids, var.public_subnet_ids)
+    endpoint_public_access  = true
+    endpoint_private_access = true
   }
 
   depends_on = [aws_iam_role.eks_cluster_role]
