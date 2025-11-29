@@ -6,7 +6,7 @@ resource "aws_eks_node_group" "managed" {
 
   node_role_arn = aws_iam_role.node_role.arn
 
-  subnet_ids = var.private_subnet_ids
+  subnet_ids = var.public_subnet_ids
 
   scaling_config {
     min_size     = each.value.min_size
