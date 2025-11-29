@@ -18,7 +18,6 @@ resource "helm_release" "jenkins" {
   }
 
   wait          = true
-  wait_for_jobs = true
   timeout       = 900 
   atomic        = true
   cleanup_on_fail = true
