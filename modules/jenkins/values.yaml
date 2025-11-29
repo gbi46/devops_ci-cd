@@ -10,4 +10,4 @@ controller:
       cpu: "1"
       memory: "1Gi"
   persistence:
-    enabled: false
+    enabled: true

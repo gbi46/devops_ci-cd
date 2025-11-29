@@ -12,6 +12,11 @@ resource "helm_release" "jenkins" {
   chart            = "jenkins"
   version          = "4.9.0"
 
+  set {
+    name  = "controller.persistence.enabled"
+    value = "false"
+  }
+
   wait          = true
   wait_for_jobs = true
   timeout       = 900 
