@@ -5,11 +5,12 @@ resource "kubernetes_namespace" "jenkins" {
 }
 
 resource "helm_release" "jenkins" {
-  name       = "jenkins"
-  namespace  = kubernetes_namespace.jenkins.metadata[0].name
-  repository = "https://charts.jenkins.io"
-  chart      = "jenkins"
-  version    = "4.9.0"
+  name             = "jenkins"
+  namespace        = "jenkins"
+  create_namespace = true
+  repository       = "https://charts.jenkins.io"
+  chart            = "jenkins"
+  version          = "4.9.0"
 
   values = [
     file("${path.module}/values.yaml")
