@@ -80,8 +80,6 @@ module "eks" {
   private_subnet_ids = module.vpc.private_subnet_ids
   public_subnet_ids  = module.vpc.public_subnet_ids
 
-  eks_managed_node_groups = var.eks_managed_node_groups
-
   eks_managed_node_groups = {
     default = {
       min_size     = 1
