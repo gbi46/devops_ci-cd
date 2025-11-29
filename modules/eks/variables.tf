@@ -6,3 +6,10 @@ variable "eks_managed_node_groups" {
   type    = any
   default = {}
 }
+variable "cluster_name" {
+  type = string
+}
+
+variable "cluster_version" {
+  type = string
+}
