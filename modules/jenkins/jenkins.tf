@@ -14,7 +14,7 @@ resource "helm_release" "jenkins" {
 
   set {
     name  = "controller.persistence.enabled"
-    value = "true"
+    value = "false"
   }
 
   wait          = true
