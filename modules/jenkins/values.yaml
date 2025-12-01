@@ -2,13 +2,17 @@ controller:
   adminUser: admin
   adminPassword: admin123
   serviceType: ClusterIP
+  serviceType: ClusterIP
+  installPlugins: []
+  installLatestPlugins: false
+  installLatestSpecifiedPlugins: false
   resources:
     requests:
       cpu: "200m"
-      memory: "512Mi"
+      memory: "1Gi"
     limits:
       cpu: "1"
       memory: "1Gi"
   persistence:
-    enabled: true
-    storageClass: gp2
+    enabled: false
+    storageClass: ""
