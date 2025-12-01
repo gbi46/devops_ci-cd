@@ -16,3 +16,7 @@ controller:
   persistence:
     enabled: false
     storageClass: ""
+
+persistence:
+  enabled: false
+  storageClass: ""
