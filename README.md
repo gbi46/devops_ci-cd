@@ -20,12 +20,22 @@ Terraform, EKS, RDS, ECR, Jenkins, Argo CD, Prometheus та Grafana.
     │  ├── eks/
     │  ├── rds/
     │  ├── jenkins/
-    │  └── argo_cd/
+    │  ├── argo_cd/
     │  └── monitoring/
     ├── charts/
     │  └── django-app/
-    │
+    │     ├── templates/
+    │     │  ├── deployment.yaml
+    │     │  ├── service.yaml
+    │     │  ├── configmap.yaml
+    │     │  └── hpa.yaml
+    │     ├── Chart.yaml
+    │     └── values.yaml   # ConfigMap зі змінними середовища
     └── Django/
+          ├── app\
+          ├── Dockerfile
+          ├── Jenkinsfile
+          └── docker-compose.yaml
 
 ------------------------------------------------------------------------
 

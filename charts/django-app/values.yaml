@@ -1,0 +1,29 @@
+replicaCount: 2
+
+image:
+  repository: 550127688581.dkr.ecr.eu-central-1.amazonaws.com/demo-platform/django-app
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+envConfig:
+  DJANGO_SETTINGS_MODULE: "app.settings"
+  ALLOWED_HOSTS: "*"
+  DEBUG: "false"
+
+hpa:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70

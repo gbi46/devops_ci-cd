@@ -1,0 +1,43 @@
+pipeline {
+  agent any
+
+  environment {
+    AWS_ACCOUNT_ID = "550127688581"
+    AWS_REGION     = "eu-central-1"
+    ECR_REPO       = "demo-platform/django-app"
+    IMAGE_TAG      = "${env.BUILD_NUMBER}"
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('Build image') {
+      steps {
+        script {
+          sh """
+            aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+            docker build -t ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${IMAGE_TAG} Django
+          """
+        }
+      }
+    }
+
+    stage('Push image') {
+      steps {
+        sh """
+          docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${IMAGE_TAG}
+        """
+      }
+    }
+
+    stage('Trigger Argo CD sync') {
+      steps {
+        echo 'Placeholder for Argo CD sync via webhook or CLI'
+      }
+    }
+  }
+}
