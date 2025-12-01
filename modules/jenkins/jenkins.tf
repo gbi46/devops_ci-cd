@@ -17,6 +17,16 @@ resource "helm_release" "jenkins" {
     value = "false"
   }
 
+  set {
+    name  = "controller.persistence.storageClass"
+    value = ""
+  }
+
+  set {
+    name  = "persistence.storageClass"
+    value = ""
+  }
+
   wait          = true
   timeout       = 900 
   atomic        = true
