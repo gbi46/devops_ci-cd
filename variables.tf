@@ -15,3 +15,16 @@ variable "db_password" {
   sensitive   = true
   default     = "ChangeMe123!"  # тимчасово для dev
 }
+
+variable "grafana_admin_user" {
+  description = "Grafana administrator username"
+  type        = string
+  default     = "grafana-admin"
+}
+
+variable "grafana_admin_password" {
+  description = "Grafana administrator password"
+  type        = string
+  sensitive   = true
+  default     = "ChangeMe123!"
+}
