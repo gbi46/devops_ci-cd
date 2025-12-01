@@ -21,7 +21,7 @@ Terraform, EKS, RDS, ECR, Jenkins, Argo CD, Prometheus та Grafana.
     │  ├── rds/
     │  ├── jenkins/
     │  └── argo_cd/
-    │
+    │  └── monitoring/
     ├── charts/
     │  └── django-app/
     │
