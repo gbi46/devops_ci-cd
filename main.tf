@@ -120,6 +120,15 @@ module "argo_cd" {
   argo_chart_version = var.argo_chart_version
 }
 
+# --- Monitoring (Prometheus + Grafana) ---
+module "monitoring" {
+  source = "./modules/monitoring"
+
+  namespace              = "monitoring"
+  grafana_admin_user     = var.grafana_admin_user
+  grafana_admin_password = var.grafana_admin_password
+}
+
 output "jenkins_url" {
   value = module.jenkins.url
 }
